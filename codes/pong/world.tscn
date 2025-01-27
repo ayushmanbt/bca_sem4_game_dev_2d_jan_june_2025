@@ -2,10 +2,12 @@
 
 [ext_resource type="Texture2D" uid="uid://c3q152m1p8lki" path="res://Background Empty.png" id="1_adiva"]
 [ext_resource type="PackedScene" uid="uid://cs5nsmvaijpe2" path="res://ball.tscn" id="1_d1pyo"]
+[ext_resource type="Script" path="res://world.gd" id="1_lvryb"]
 [ext_resource type="Script" path="res://paddle.gd" id="2_66rcd"]
 [ext_resource type="Texture2D" uid="uid://diqghu21yke7b" path="res://Paddle_1.png" id="3_77wis"]
 [ext_resource type="Texture2D" uid="uid://cbdfhx7ma0ec" path="res://Paddle_2.png" id="4_mlua7"]
 [ext_resource type="Script" path="res://paddle_right.gd" id="4_mu5u0"]
+[ext_resource type="Theme" uid="uid://bj42u86u7s328" path="res://new_theme.tres" id="8_47hqn"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_xkscx"]
 friction = 0.0
@@ -31,13 +33,9 @@ bounce = 100.0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_k2hin"]
 size = Vector2(24, 158)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_j30bx"]
-size = Vector2(44, 539)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_u7xkn"]
-size = Vector2(50, 542)
-
 [node name="World" type="Node2D"]
+process_mode = 3
+script = ExtResource("1_lvryb")
 
 [node name="BackgroundEmpty" type="Sprite2D" parent="."]
 position = Vector2(475, 268.5)
@@ -45,15 +43,14 @@ scale = Vector2(0.864062, 0.973611)
 texture = ExtResource("1_adiva")
 
 [node name="Ball" parent="." instance=ExtResource("1_d1pyo")]
+process_mode = 1
 position = Vector2(473, 260)
 physics_material_override = SubResource("PhysicsMaterial_xkscx")
-linear_damp_mode = 1
-script = null
 
 [node name="StaticBody2D2" type="StaticBody2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2"]
-position = Vector2(489.5, -1)
+position = Vector2(484.5, -1)
 shape = SubResource("RectangleShape2D_na461")
 
 [node name="StaticBody2D3" type="StaticBody2D" parent="."]
@@ -63,6 +60,7 @@ position = Vector2(491.5, 541)
 shape = SubResource("RectangleShape2D_rxvr7")
 
 [node name="paddle_left" type="StaticBody2D" parent="."]
+process_mode = 1
 position = Vector2(40, 259)
 physics_material_override = SubResource("PhysicsMaterial_q5xw8")
 script = ExtResource("2_66rcd")
@@ -78,6 +76,7 @@ scale = Vector2(1.5, 1.5)
 shape = SubResource("RectangleShape2D_aditv")
 
 [node name="paddle_right" type="StaticBody2D" parent="."]
+process_mode = 1
 position = Vector2(910, 259)
 physics_material_override = SubResource("PhysicsMaterial_2ahy1")
 script = ExtResource("4_mu5u0")
@@ -91,18 +90,50 @@ texture = ExtResource("4_mlua7")
 position = Vector2(1, 0)
 shape = SubResource("RectangleShape2D_k2hin")
 
-[node name="LeftTrigger" type="StaticBody2D" parent="." groups=["trigger"]]
-position = Vector2(288, 16)
-metadata/_edit_group_ = true
+[node name="Control" type="Control" parent="."]
+z_index = 1
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftTrigger"]
-position = Vector2(-12, 259.5)
-shape = SubResource("RectangleShape2D_j30bx")
+[node name="LeftScore" type="RichTextLabel" parent="Control"]
+layout_mode = 0
+offset_left = 379.0
+offset_top = 28.0
+offset_right = 436.0
+offset_bottom = 89.0
+theme = ExtResource("8_47hqn")
+text = "0
+"
+fit_content = true
 
-[node name="RightTrigger" type="StaticBody2D" parent="." groups=["trigger"]]
-position = Vector2(718, 2)
-metadata/_edit_group_ = true
+[node name="RightScore" type="RichTextLabel" parent="Control"]
+layout_mode = 0
+offset_left = 539.0
+offset_top = 28.0
+offset_right = 587.0
+offset_bottom = 91.0
+theme = ExtResource("8_47hqn")
+text = "0"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RightTrigger"]
-position = Vector2(-15, 261)
-shape = SubResource("RectangleShape2D_u7xkn")
+[node name="PausePanel" type="Panel" parent="Control"]
+visible = false
+layout_mode = 0
+offset_right = 950.0
+offset_bottom = 643.0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Control/PausePanel"]
+layout_mode = 0
+offset_left = 392.0
+offset_top = 233.0
+offset_right = 563.0
+offset_bottom = 291.0
+theme = ExtResource("8_47hqn")
+text = "PAUSED"
+
+[connection signal="child_entered_tree" from="." to="." method="_on_child_entered_tree"]
