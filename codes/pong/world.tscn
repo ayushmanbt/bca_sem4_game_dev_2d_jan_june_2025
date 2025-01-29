@@ -136,4 +136,15 @@ offset_bottom = 291.0
 theme = ExtResource("8_47hqn")
 text = "PAUSED"
 
+[node name="Pause" type="MenuButton" parent="Control"]
+process_mode = 3
+layout_mode = 0
+offset_left = 414.0
+offset_top = 22.0
+offset_right = 538.0
+offset_bottom = 85.0
+theme = ExtResource("8_47hqn")
+text = "||"
+
 [connection signal="child_entered_tree" from="." to="." method="_on_child_entered_tree"]
+[connection signal="pressed" from="Control/Pause" to="." method="_on_pause_pressed"]
